@@ -20,7 +20,7 @@ namespace Ordering.Infrastructure.Repositories
 		public async Task<IEnumerable<Order>> GetOrdersByUserName(string userName)
 		{
 			return await _dbContext.Orders
-				.Where(a => a.UserName.Equals(userName, StringComparison.InvariantCultureIgnoreCase))
+				.Where(a => a.UserName.Equals(userName))
 				.ToListAsync();
 		}
 	}

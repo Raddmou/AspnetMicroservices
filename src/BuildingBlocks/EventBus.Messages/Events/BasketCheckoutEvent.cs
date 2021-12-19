@@ -1,8 +1,13 @@
-﻿namespace Ordering.Application.Features.Orders.Queries.GetOrdersList
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EventBus.Messages.Events
 {
-	public class OrdersVm
+	public class BasketCheckoutEvent : IntegrationBaseEvent
 	{
-        public int Id { get; set; }
         public string UserName { get; set; }
         public decimal TotalPrice { get; set; }
 
