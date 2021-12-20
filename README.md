@@ -15,7 +15,7 @@ Training project for the implementation of micro services in .net 5:
 
   - Swagger Open API implementation
 
--Basket microservice:
+- Basket microservice:
 
   - ASP.NET Web API application
 
