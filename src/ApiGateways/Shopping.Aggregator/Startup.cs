@@ -31,11 +31,11 @@ namespace Shopping.Aggregator
 			{
 				configureClient.BaseAddress = new Uri(Configuration.GetValue<string>("ApiSettings:CatalogUrl"));
 			});
-			services.AddHttpClient<IBasketService, IBasketService>(configureClient =>
+			services.AddHttpClient<IBasketService, BasketService>(configureClient =>
 			{
 				configureClient.BaseAddress = new Uri(Configuration.GetValue<string>("ApiSettings:BasketUrl"));
 			});
-			services.AddHttpClient<IOrderService, IOrderService>(configureClient =>
+			services.AddHttpClient<IOrderService, OrderService>(configureClient =>
 			{
 				configureClient.BaseAddress = new Uri(Configuration.GetValue<string>("ApiSettings:OrderingUrl"));
 			});
@@ -48,8 +48,12 @@ namespace Shopping.Aggregator
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
 		{
+			logger.LogInformation(Configuration.GetValue<string>("ApiSettings:OrderingUrl"));
+			logger.LogInformation(Configuration.GetValue<string>("ApiSettings:BasketUrl"));
+			logger.LogInformation(Configuration.GetValue<string>("ApiSettings:OrderingUrl"));
+
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
