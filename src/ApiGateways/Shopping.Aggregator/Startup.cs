@@ -1,8 +1,11 @@
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -40,6 +43,11 @@ namespace Shopping.Aggregator
 				configureClient.BaseAddress = new Uri(Configuration.GetValue<string>("ApiSettings:OrderingUrl"));
 			});
 
+			services.AddHealthChecks()
+				.AddUrlGroup(new Uri($"{Configuration["ApiSettings:CatalogUrl"]}/hc"), "Catalog.API", HealthStatus.Degraded)
+				.AddUrlGroup(new Uri($"{Configuration["ApiSettings:BasketUrl"]}/hc"), "Basket.API", HealthStatus.Degraded)
+				.AddUrlGroup(new Uri($"{Configuration["ApiSettings:OrderingUrl"]}/hc"), "Ordering.API", HealthStatus.Degraded);
+
 			services.AddControllers();
 			services.AddSwaggerGen(c =>
 			{
@@ -68,6 +76,11 @@ namespace Shopping.Aggregator
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
+				endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+				{
+					Predicate = _ => true,
+					ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+				});
 			});
 		}
 	}
